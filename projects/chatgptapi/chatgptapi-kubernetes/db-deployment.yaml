@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatgptapi-db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatgptapi-db
+  template:
+    metadata:
+      labels:
+        app: chatgptapi-db
+    spec:
+      containers:
+        - name: chatgptapi-db-container
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: PLACEHOLDER_POSTGRES_DB_NAME
+            - name: POSTGRES_USER
+              value: PLACEHOLDER_POSTGRES_USERNAME
+            - name: POSTGRES_PASSWORD
+              value: PLACEHOLDER_POSTGRES_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chatgptapi-db-service
+spec:
+  selector:
+    app: chatgptapi-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432

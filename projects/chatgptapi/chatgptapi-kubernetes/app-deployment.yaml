@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatgptapi-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatgptapi-app
+  template:
+    metadata:
+      labels:
+        app: chatgptapi-app
+    spec:
+      containers:
+        - name: chatgptapi-container
+          image: placeholder_app_image
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://chatgptapi-db-service:5432/PLACEHOLDER_POSTGRES_DB_NAME
+            - name: SPRING_DATASOURCE_USERNAME
+              value: PLACEHOLDER_POSTGRES_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: PLACEHOLDER_POSTGRES_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chatgptapi-app-service
+spec:
+  selector:
+    app: chatgptapi-app
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
